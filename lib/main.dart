@@ -16,10 +16,32 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   List<String> _items = [];
 
+  _scan() async {
+    var result = await BarcodeScanner.scan();
+
+    if (ResultType.Barcode == result.type) {
+      setState(() {
+        int index = _items.indexOf(result.rawContent);
+        if (index != -1) {
+          _items.removeAt(index);
+        }
+        _items.insert(0, result.rawContent);
+      });
+      await _openUrl(result.rawContent);
+    }
+  }
+
   _openUrl(String url) async {
     if (await canLaunch(url)) {
       await launch(url);
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _scan();
   }
 
   @override
@@ -44,18 +66,7 @@ class _MyAppState extends State<MyApp> {
                 padding: EdgeInsets.all(12),
                 color: Color.fromARGB(127, 0xff, 0xaa, 0x80),
                 onPressed: () async {
-                  var result = await BarcodeScanner.scan();
-
-                  if (ResultType.Barcode == result.type) {
-                    setState(() {
-                      int index = _items.indexOf(result.rawContent);
-                      if (index != -1) {
-                        _items.removeAt(index);
-                      }
-                      _items.insert(0, result.rawContent);
-                    });
-                    _openUrl(result.rawContent);
-                  }
+                  await _scan();
                 },
                 child: Row(children: <Widget>[
                   Spacer(),
@@ -97,7 +108,7 @@ class _MyAppState extends State<MyApp> {
                           ),
                           InkWell(
                             onTap: () async {
-                              _openUrl(_items[index]);
+                              await _openUrl(_items[index]);
                             },
                             child: Container(
                               width: MediaQuery.of(context).size.width - 90,
