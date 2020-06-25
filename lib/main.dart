@@ -2,6 +2,7 @@ import 'package:barcode_scan/barcode_scan.dart';
 import 'package:barcode_scan/platform_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 void main() {
@@ -14,7 +15,16 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  SharedPreferences _prefs;
   List<String> _items = [];
+
+  _initPrefs() async {
+    _prefs = await SharedPreferences.getInstance();
+    List<String> urls = _prefs.getStringList('urls');
+    setState(() {
+      _items = urls ?? _items;
+    });
+  }
 
   _scan() async {
     var result = await BarcodeScanner.scan();
@@ -26,6 +36,7 @@ class _MyAppState extends State<MyApp> {
           _items.removeAt(index);
         }
         _items.insert(0, result.rawContent);
+        _prefs.setStringList('urls', _items);
       });
       await _openUrl(result.rawContent);
     }
@@ -40,7 +51,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-
+    _initPrefs();
     _scan();
   }
 
@@ -99,6 +110,7 @@ class _MyAppState extends State<MyApp> {
                             onTap: () async {
                               setState(() {
                                 _items.removeAt(index);
+                                _prefs.setStringList('urls', _items);
                               });
                             },
                             child: Container(
