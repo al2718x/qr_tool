@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:barcode_scan/platform_wrapper.dart';
 import 'package:flutter/material.dart';
@@ -15,12 +17,12 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  SharedPreferences? _prefs;
+  SharedPreferences _prefs;
   List<String> _items = [];
 
   _initPrefs() async {
     _prefs = await SharedPreferences.getInstance();
-    List<String>? urls = _prefs?.getStringList('urls');
+    List<String> urls = _prefs?.getStringList('urls');
     setState(() {
       _items = urls ?? _items;
     });
