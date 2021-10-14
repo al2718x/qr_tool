@@ -15,12 +15,12 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  SharedPreferences _prefs;
+  SharedPreferences? _prefs;
   List<String> _items = [];
 
   _initPrefs() async {
     _prefs = await SharedPreferences.getInstance();
-    List<String> urls = _prefs.getStringList('urls');
+    List<String>? urls = _prefs?.getStringList('urls');
     setState(() {
       _items = urls ?? _items;
     });
@@ -36,7 +36,7 @@ class _MyAppState extends State<MyApp> {
           _items.removeAt(index);
         }
         _items.insert(0, result.rawContent);
-        _prefs.setStringList('urls', _items);
+        _prefs?.setStringList('urls', _items);
       });
       await _openUrl(result.rawContent);
     }
@@ -110,7 +110,7 @@ class _MyAppState extends State<MyApp> {
                             onTap: () async {
                               setState(() {
                                 _items.removeAt(index);
-                                _prefs.setStringList('urls', _items);
+                                _prefs?.setStringList('urls', _items);
                               });
                             },
                             child: Container(
