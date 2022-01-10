@@ -1,7 +1,6 @@
 // @dart=2.9
 
 import 'package:barcode_scan/barcode_scan.dart';
-import 'package:barcode_scan/platform_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
