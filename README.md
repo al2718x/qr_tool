@@ -1,4 +1,4 @@
-# QrTool
+# qr_tool
 
 A new Flutter project.
 
