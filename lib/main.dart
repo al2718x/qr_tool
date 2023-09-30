@@ -8,10 +8,12 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Preferences.init();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -30,13 +32,7 @@ class _MyAppState extends State<MyApp> {
         _items.insert(0, result.rawContent);
         Preferences.setList('urls', _items);
       });
-      await _openUrl(result.rawContent);
-    }
-  }
-
-  _openUrl(String url) async {
-    if (await canLaunchUrlString(url)) {
-      await launchUrlString(url);
+      await launchUrlString(result.rawContent, mode: LaunchMode.externalApplication);
     }
   }
 
@@ -61,13 +57,13 @@ class _MyAppState extends State<MyApp> {
           child: Column(
             children: <Widget>[
               Container(
-                padding: EdgeInsets.all(8),
-                color: Color.fromARGB(127, 0xff, 0xaa, 0x80),
+                padding: const EdgeInsets.all(8),
+                color: const Color.fromARGB(127, 0xff, 0xaa, 0x80),
                 child: TextButton(
                   onPressed: () async {
                     await _scan();
                   },
-                  child: Row(children: <Widget>[
+                  child: Row(children: const <Widget>[
                     Spacer(),
                     Icon(Icons.camera, size: 32),
                     Text(' QR', style: TextStyle(fontSize: 24)),
@@ -80,7 +76,7 @@ class _MyAppState extends State<MyApp> {
                     itemCount: _items.length,
                     itemBuilder: (BuildContext context, int index) {
                       return Container(
-                        padding: EdgeInsets.only(bottom: 12),
+                        padding: const EdgeInsets.only(bottom: 12),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -89,8 +85,8 @@ class _MyAppState extends State<MyApp> {
                                 await Clipboard.setData(ClipboardData(text: _items[index]));
                               },
                               child: Container(
-                                padding: EdgeInsets.only(right: 8),
-                                child: Icon(Icons.content_copy),
+                                padding: const EdgeInsets.only(right: 8),
+                                child: const Icon(Icons.content_copy),
                               ),
                             ),
                             InkWell(
@@ -101,15 +97,15 @@ class _MyAppState extends State<MyApp> {
                                 });
                               },
                               child: Container(
-                                padding: EdgeInsets.only(right: 10),
-                                child: Icon(Icons.delete_outline),
+                                padding: const EdgeInsets.only(right: 10),
+                                child: const Icon(Icons.delete_outline),
                               ),
                             ),
                             InkWell(
                               onTap: () async {
-                                await _openUrl(_items[index]);
+                                await launchUrlString(_items[index], mode: LaunchMode.externalApplication);
                               },
-                              child: Container(
+                              child: SizedBox(
                                 width: MediaQuery.of(context).size.width - 90,
                                 child: Text(
                                   _items[index],
