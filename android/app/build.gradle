@@ -44,7 +44,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.example.qr_tool"
+        applicationId "com.al2718x.qr_tool"
         minSdkVersion 18 //to conform barcode_scan2
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
